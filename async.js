@@ -94,3 +94,34 @@ const getData = async function(){
 
 
 getData()
+
+// class 4
+
+const animals = {
+  tiger : 3,
+  lion : 4,
+  elephant : 5
+}
+
+const arr = [2,3,4,5,6,7]
+
+
+const [a,v,b,...rest] = arr
+
+const {tiger,lion,elephant} = animals
+
+
+console.log('number number' , a)
+
+console.log('tiger tiger',tiger)
+
+
+
+function abd(a , b, c){
+  console.log(a)
+  console.log(b)
+  console.log(c)
+}
+
+abd(tiger,lion,rest)
+
