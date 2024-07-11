@@ -1,3 +1,5 @@
+// import { reject } from "async";
+
 const promise = new Promise((resolve, reject) => {
   if (true) {
     resolve("it worked");
@@ -35,26 +37,29 @@ Promise.all([promise, promise2, promise3, promise4])
 // if one promise reject, it stop totally
 
 // class 2
-const urls = ["https://jsonplaceholder.typicode.com/users","https://jsonplaceholder.typicode.com/posts","https://jsonplaceholder.typicode.com/albums"]
+const urls = [
+  "https://jsonplaceholder.typicode.com/users",
+  "https://jsonplaceholder.typicode.com/posts",
+  "https://jsonplaceholder.typicode.com/albums",
+];
 
-
-
-
-Promise.all(urls.map(url => {
-    return fetch(url).then(resp => resp.json())
-})).then(res => {
-    console.log(res)
-})
-.finally(
-  ()=> console.log('a piece of code will run no matter the output')
+Promise.all(
+  urls.map((url) => {
+    return fetch(url).then((resp) => resp.json());
+  })
 )
-
-
+  .then((res) => {
+    console.log(res);
+  })
+  .finally(() => console.log("a piece of code will run no matter the output"));
 
 // const fesst = new Promise(()=>fetch("https://jsonplaceholder.typicode.com/users").then(resp => resp.json()).then(res => { return res[0] }))
-fetch("https://jsonplaceholder.typicode.com/users").then(resp => resp.json()).then(res => { console.log( res[0]) })
+fetch("https://jsonplaceholder.typicode.com/users")
+  .then((resp) => resp.json())
+  .then((res) => {
+    console.log(res[0]);
+  });
 // console.log(fesst.then(resss => {return resss}))
-
 
 // const movePlayer = new Promise ((miles,direction)=>{
 //     console.log(`player has moved ${miles} miles in ${direction}`)
@@ -65,83 +70,80 @@ fetch("https://jsonplaceholder.typicode.com/users").then(resp => resp.json()).th
 // .then(()=> movePlayer(50,'up'))
 // .then(()=> movePlayer(100 , 'finally go down'))
 
-
-
-
 // class 3
 
 async function fetchUsers() {
-    
-    const resp = await fetch('https://jsonplaceholder.typicode.com/users')
+  const resp = await fetch("https://jsonplaceholder.typicode.com/users");
 
-    const data1 = await resp.json();
-    
-    console.log('this one async',data1)  
+  const data1 = await resp.json();
 
-
+  console.log("this one async", data1);
 }
 
+const getData = async function () {
+  try {
+    const [user, posts, albums] = await Promise.all(
+      urls.map((url) => fetch(url).then((resp) => resp.json()))
+    );
 
-const getData = async function(){
-    try{
-        const [user, posts,albums] = await Promise.all(urls.map(url => fetch(url).then(resp=> resp.json())))
+    console.log(user[1]);
+    console.log(posts[1]);
+    console.log(albums[1]);
+  } catch (err) {
+    console.log("motherfucking error happening again" + err);
+  }
+};
 
-        console.log(user[1])
-        console.log(posts[1])
-        console.log(albums[1])
-    }
-    catch(err){
-        console.log('motherfucking error happening again' + err)
-    }
-}
-
-
-getData()
+getData();
 
 // class 4
 
 const animals = {
-  tiger : 3,
-  lion : 4,
-  elephant : 5
+  tiger: 3,
+  lion: 4,
+  elephant: 5,
+};
+
+const arr = [2, 3, 4, 5, 6, 7];
+
+const [a, v, b, ...rest] = arr;
+
+const { tiger, lion, elephant } = animals;
+
+console.log("number number", a);
+
+console.log("tiger tiger", tiger);
+
+function abd(a, b, c) {
+  console.log(a);
+  console.log(b);
+  console.log(c);
 }
 
-const arr = [2,3,4,5,6,7]
-
-
-const [a,v,b,...rest] = arr
-
-const {tiger,lion,elephant} = animals
-
-
-console.log('number number' , a)
-
-console.log('tiger tiger',tiger)
-
-
-
-function abd(a , b, c){
-  console.log(a)
-  console.log(b)
-  console.log(c)
-}
-
-abd(tiger,lion,rest)
+abd(tiger, lion, rest);
 
 // class 5
 
+const getData2 = async function () {
+  const arrayOfPromises = urls.map((url) => fetch(url));
 
-const getData2 = async function(){ 
-  const arrayOfPromises = urls.map(url=> fetch(url))
+  for await (let fetchData of arrayOfPromises) {
+    const Data1 = await fetchData.json();
 
-  for await (let fetchData of arrayOfPromises){
-    const  Data1 = await fetchData.json()
-
-
-    console.log('getData2 ', Data1[0])
+    console.log("getData2 ", Data1[0]);
   }
+};
+
+getData2();
+
+// class 6
+
+const p1 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 3000);
+});
+
+const p2 = new Promise((resolve,reject)=>{
+setTimeout(resolve, 1111)})
 
 
-}
-
-getData2()
+Promise.allSettled([p1,p2]).then(data=> console.log(data)).catch(e=> console.log('somthing is wrong',e))
