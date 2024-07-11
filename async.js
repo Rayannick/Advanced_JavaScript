@@ -45,6 +45,9 @@ Promise.all(urls.map(url => {
 })).then(res => {
     console.log(res)
 })
+.finally(
+  ()=> console.log('a piece of code will run no matter the output')
+)
 
 
 
@@ -125,3 +128,20 @@ function abd(a , b, c){
 
 abd(tiger,lion,rest)
 
+// class 5
+
+
+const getData2 = async function(){ 
+  const arrayOfPromises = urls.map(url=> fetch(url))
+
+  for await (let fetchData of arrayOfPromises){
+    const  Data1 = await fetchData.json()
+
+
+    console.log('getData2 ', Data1[0])
+  }
+
+
+}
+
+getData2()
